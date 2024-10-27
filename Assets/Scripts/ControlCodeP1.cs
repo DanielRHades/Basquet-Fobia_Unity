@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ControlCode : MonoBehaviour
+public class ControlCodeP1 : MonoBehaviour
 {
     private Vector3 ultimaPosicion;
 
@@ -23,21 +23,21 @@ public class ControlCode : MonoBehaviour
     // Umbral para considerar movimiento
     public float umbralMovimiento = 0.1f;
 
-    public Animator personaje;
+    public Animator player1;
     public Animator balon;// Asegúrate de asignar esto desde el inspector
 
     void Start()
     {
         ultimaPosicion = transform.position;
 
-        if (personaje == null)
+        if (player1 == null)
         {
             Debug.LogWarning("Animator no asignado en el inspector.");
         }
         else
         {
             // Listar todos los parámetros para verificar cuáles están disponibles
-            foreach (var param in personaje.parameters)
+            foreach (var param in player1.parameters)
             {
                 Debug.Log("Parámetro encontrado: " + param.name + " - Tipo: " + param.type);
             }
@@ -100,40 +100,40 @@ public class ControlCode : MonoBehaviour
 
     public void AnimatotionPlay()
     {
-        if (personaje != null)
+        if (player1 != null)
         {
             // Cambia el parámetro según el movimiento
-            personaje.SetBool("IsMoving", direccionMovimiento.magnitude > umbralMovimiento);
+            player1.SetBool("IsMovingP1", direccionMovimiento.magnitude > umbralMovimiento);
             
         }
 
         if (balon != null)
         {
             // Cambia el parámetro según el movimiento
-            balon.SetBool("IsMoving", direccionMovimiento.magnitude > umbralMovimiento);
+            balon.SetBool("IsMovingP1", direccionMovimiento.magnitude > umbralMovimiento);
             
         }
     }
     public void CambiarEstadoBalon(bool tieneBalon)
     {
-        if (personaje != null)
+        if (player1 != null)
         {
-            personaje.SetBool("TieneBalon", tieneBalon);
+            player1.SetBool("TieneBalonP1", tieneBalon);
             Debug.Log("Estado de balón actualizado: " + tieneBalon);
         }
 
         if (balon != null)
         {
-            balon.SetBool("TieneBalon", tieneBalon);
+            balon.SetBool("TieneBalonP1", tieneBalon);
             Debug.Log("Estado de balón actualizado: " + tieneBalon);
         }
     }
 
     public void LanzarBalon()
     {
-        if (personaje != null)
+        if (player1 != null)
         {
-            personaje.SetTrigger("Lanzar"); // Asegúrate de que este trigger esté definido en tu Animator
+            player1.SetTrigger("Lanzar"); // Asegúrate de que este trigger esté definido en tu Animator
         }
     }
 }

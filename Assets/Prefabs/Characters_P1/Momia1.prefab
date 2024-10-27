@@ -191,7 +191,7 @@ MonoBehaviour:
   velocidadCorrer: 10
   suavizadoRotacion: 5
   umbralMovimiento: 0.1
-  personaje: {fileID: 2083740188480023340}
+  player1: {fileID: 2083740188480023340}
   balon: {fileID: 7009929529311635761}
 --- !u!114 &-9206037030373193970
 MonoBehaviour:
@@ -208,6 +208,7 @@ MonoBehaviour:
   puntoLanzamiento: {fileID: 3035506816117406385}
   cesta: {x: 12.8, y: 4, z: 0}
   alturaMaxima: 5
+  tieneBalon: 0
 --- !u!54 &3864996102966034976
 Rigidbody:
   m_ObjectHideFlags: 0
