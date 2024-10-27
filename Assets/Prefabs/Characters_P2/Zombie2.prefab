@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6121732671529900996}
   - component: {fileID: 3841722620033571526}
   - component: {fileID: 3364837144226401511}
-  - component: {fileID: 2708060129509089545}
+  - component: {fileID: 1063629033463601406}
   - component: {fileID: 7222228053206093832}
   - component: {fileID: 3864996102966034976}
   m_Layer: 0
@@ -140,8 +140,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2708060129509089545}
-        m_TargetAssemblyTypeName: ControlCode, Assembly-CSharp
+      - m_Target: {fileID: 1063629033463601406}
+        m_TargetAssemblyTypeName: ControlCodeP2, Assembly-CSharp
         m_MethodName: EnMovimiento
         m_Mode: 0
         m_Arguments:
@@ -156,8 +156,8 @@ MonoBehaviour:
     m_ActionName: MAPEADO/Movimiento[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2708060129509089545}
-        m_TargetAssemblyTypeName: ControlCode, Assembly-CSharp
+      - m_Target: {fileID: 1063629033463601406}
+        m_TargetAssemblyTypeName: ControlCodeP2, Assembly-CSharp
         m_MethodName: EnCorrer
         m_Mode: 0
         m_Arguments:
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_DefaultActionMap: Mapeado_P2
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2708060129509089545
+--- !u!114 &1063629033463601406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,13 +184,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6653996713098330808}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af1bfe0e1985e4d459f683f2480c5c56, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b57e033236b89a4684abd440b93feec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadTrotar: 6
+  velocidadTrotar: 5
   velocidadCorrer: 10
   suavizadoRotacion: 5
   umbralMovimiento: 0.1
+  player2: {fileID: 4936087225403782569}
+  balon: {fileID: 4555164540052899285}
 --- !u!114 &7222228053206093832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +208,7 @@ MonoBehaviour:
   puntoLanzamientoP2: {fileID: 7843480433185213255}
   cestaP2: {x: -12.8, y: 4, z: 0}
   alturaMaximaP2: 5
+  tieneBalonP2: 0
 --- !u!54 &3864996102966034976
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -329,7 +332,7 @@ Animator:
   m_GameObject: {fileID: 7776673014665928748}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 42c2ed7cd20532d46a8e4959826cf53a, type: 2}
+  m_Controller: {fileID: 9100000, guid: d2ec616813d775f488445301aaeb8c2d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -423,7 +426,7 @@ Animator:
   m_GameObject: {fileID: 8508311730701187434}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0d23d5d4c844c1f4090b8884194a02f6, type: 2}
+  m_Controller: {fileID: 9100000, guid: d4f923558d22f524e92a2eadd7b74e97, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class BallManagerP2 : MonoBehaviour
     public float alturaMaximaP2 = 5f;     // Altura máxima que debe alcanzar el balón
     private GameObject balonCancha;       // Referencia al balón de la cancha
     public bool tieneBalonP2 = false;    // Verifica si el segundo jugador ha recogido la pelota del centro
+    private ControlCodeP2 controlCode;    // Referencia al script del personaje
 
     void Start()
     {
@@ -31,6 +33,8 @@ public class BallManagerP2 : MonoBehaviour
         {
             Debug.LogWarning("No se encontró el BalonCancha con el tag especificado.");
         }
+
+        controlCode = GetComponent<ControlCodeP2>();
     }
 
     void Update()
@@ -46,7 +50,6 @@ public class BallManagerP2 : MonoBehaviour
         if (Gamepad.all.Count > 0 && Gamepad.all[1].buttonSouth.wasPressedThisFrame && tieneBalonP2)
         {
             LanzarBalonP2();
-            DesactivarBalonManoP2();
         }
 
         // Robo de balón con el botón "Y" o "buttonNorth" para el Jugador 2
@@ -74,17 +77,11 @@ public class BallManagerP2 : MonoBehaviour
         {
             if (col.gameObject == balonCancha)
             {
-                balonCancha.SetActive(false); // Desactivar el balón de la cancha
+                balonCancha.SetActive(false);
+                 // Desactivar el balón de la cancha
                 tieneBalonP2 = true; // Indicar que el jugador ahora tiene el balón
 
-                // Activar balón en la mano del jugador
-                foreach (Transform child in transform)
-                {
-                    if (child.CompareTag("BalonManoP2"))
-                    {
-                        child.gameObject.SetActive(true); // Activar el balón en la mano
-                    }
-                }
+                controlCode.CambiarEstadoBalon(tieneBalonP2);
             }
         }
     }
@@ -110,32 +107,30 @@ public class BallManagerP2 : MonoBehaviour
         rb.velocity = velocidadInicial;
 
         tieneBalonP2 = false; // Resetear el estado de tener balón
-    }
 
-    public void DesactivarBalonManoP2()
-    {
-        // Desactivar el balón en la mano del jugador
-        foreach (Transform child in transform)
-        {
-            if (child.CompareTag("BalonManoP2"))
-            {
-                child.gameObject.SetActive(false); // Desactivar el balón en la mano
-            }
-        }
+        controlCode.CambiarEstadoBalon(tieneBalonP2);
     }
 
     public void RobarBalonP2(GameObject oponente)
     {
-        // Verificar si el oponente (Jugador 1) tiene el balón
+    // Verificar si el oponente (Jugador 1) tiene el balón
         BallManagerP1 managerOponente = oponente.GetComponent<BallManagerP1>();
+        ControlCodeP1 controlCodeOponente = oponente.GetComponent<ControlCodeP1>(); // Obtener el script ControlCodeP1 de Player1
+
         if (managerOponente != null && managerOponente.tieneBalon)
         {
-            // Robar el balón
-            managerOponente.DesactivarBalonMano(); // Desactivar el balón en el jugador 1
-            managerOponente.tieneBalon = false; // El jugador 1 ya no tiene el balón
+        // Actualizar el estado de tieneBalon en Player1
+            managerOponente.tieneBalon = false; 
+            tieneBalonP2 = true;
 
-            // Asignar el balón al jugador 2
-            RecogerBalonP2(); // Llamar la función para que el jugador 2 recoja el balón
+        // Cambiar el estado de balón en el animador de Player1 para desactivar dribleo
+            if (controlCodeOponente != null)
+            {
+                controlCodeOponente.CambiarEstadoBalon(false);
+            }
+
+        // Activar el estado de balón en Player2
+            controlCode.CambiarEstadoBalon(tieneBalonP2);
 
             Debug.Log("Jugador 2 ha robado el balón del Jugador 1.");
         }
