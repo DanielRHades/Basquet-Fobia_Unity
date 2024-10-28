@@ -49,7 +49,7 @@ public class BallManagerP2 : MonoBehaviour
         // Lanzar balón con el botón "X" o "buttonSouth"
         if (Gamepad.all.Count > 0 && Gamepad.all[1].buttonSouth.wasPressedThisFrame && tieneBalonP2)
         {
-            LanzarBalonP2();
+            LanzarBalonAwait();
         }
 
         // Robo de balón con el botón "Y" o "buttonNorth" para el Jugador 2
@@ -63,7 +63,7 @@ public class BallManagerP2 : MonoBehaviour
                 BallManagerP1 jugador2 = col.GetComponent<BallManagerP1>();
                 if (jugador2 != null && !tieneBalonP2)
                 {
-                    RobarBalonP2(jugador2.gameObject);
+                    StartCoroutine(QuitarBalonAwait(jugador2.gameObject, 0.85f));
                 }
             }
 
@@ -86,7 +86,12 @@ public class BallManagerP2 : MonoBehaviour
         }
     }
 
-    void LanzarBalonP2()
+      void LanzarBalonAwait()
+    {
+        controlCode.LanzarBalonP2();
+        Invoke("LanzarBalon", 2f);
+    }
+    void LanzarBalon()
     {
         // Colocar el balón de la cancha 2 unidades más lejos en la dirección de frente del jugador
         Vector3 lanzamientoPosicion = puntoLanzamientoP2.position + puntoLanzamientoP2.forward * 2; // Aumentar 2 unidades
@@ -111,8 +116,15 @@ public class BallManagerP2 : MonoBehaviour
         controlCode.CambiarEstadoBalon(tieneBalonP2);
     }
 
-    public void RobarBalonP2(GameObject oponente)
+    IEnumerator QuitarBalonAwait(GameObject oponente, float delay)
     {
+        controlCode.QuitarBalonP2();
+        yield return new WaitForSeconds(delay);
+        RobarBalonP2(oponente);
+    }
+
+    public void RobarBalonP2(GameObject oponente)
+    {   
     // Verificar si el oponente (Jugador 1) tiene el balón
         BallManagerP1 managerOponente = oponente.GetComponent<BallManagerP1>();
         ControlCodeP1 controlCodeOponente = oponente.GetComponent<ControlCodeP1>(); // Obtener el script ControlCodeP1 de Player1
@@ -126,12 +138,13 @@ public class BallManagerP2 : MonoBehaviour
         // Cambiar el estado de balón en el animador de Player1 para desactivar dribleo
             if (controlCodeOponente != null)
             {
+                controlCodeOponente.BalonRobadoP1();
                 controlCodeOponente.CambiarEstadoBalon(false);
             }
 
         // Activar el estado de balón en Player2
             controlCode.CambiarEstadoBalon(tieneBalonP2);
-
+            
             Debug.Log("Jugador 2 ha robado el balón del Jugador 1.");
         }
     }

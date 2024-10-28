@@ -129,11 +129,37 @@ public class ControlCodeP1 : MonoBehaviour
         }
     }
 
-    public void LanzarBalon()
+    public void LanzarBalonP1()
     {
         if (player1 != null)
-        {
-            player1.SetTrigger("Lanzar"); // Asegúrate de que este trigger esté definido en tu Animator
+        {   
+            player1.ResetTrigger("BalonRobadoP1");
+            player1.ResetTrigger("QuitarBalonP1");
+            player1.SetTrigger("LanzarP1");
+            balon.SetTrigger("LanzarBalonP1"); // Asegúrate de que este trigger esté definido en tu Animator
         }
     }
+
+    public void QuitarBalonP1()
+    {
+        if (player1 != null)
+        {   
+            balon.ResetTrigger("LanzarBalonP1");
+            player1.ResetTrigger("LanzarP1");
+            player1.ResetTrigger("BalonRobadoP1");
+            player1.SetTrigger("QuitarBalonP1"); // Asegúrate de que este trigger esté definido en tu Animator
+        }
+    }
+
+    public void BalonRobadoP1()
+    {
+        if (player1 != null)
+        {   
+            balon.ResetTrigger("LanzarBalonP1");
+            player1.ResetTrigger("LanzarP1");
+            player1.ResetTrigger("QuitarBalonP1");
+            player1.SetTrigger("BalonRobadoP1"); // Asegúrate de que este trigger esté definido en tu Animator
+        }
+    }
+    
 }
