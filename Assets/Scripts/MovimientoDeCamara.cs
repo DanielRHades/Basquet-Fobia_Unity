@@ -1,42 +1,75 @@
 using UnityEngine;
 
-public class FollowObjectOnXAxis : MonoBehaviour
+public class MovimientoDeCamara : MonoBehaviour
 {
-    // Distancia fija en el eje Y y Z
     public float fixedYPosition;
     public float fixedZPosition;
 
-    // Nombre del tag del objeto que la c·mara debe seguir
-    private string targetTag = "BalonCancha";
-    private Transform targetObject;
+    private Transform targetObject; // El objeto que la c√°mara sigue din√°micamente
+    private string balonTag = "BalonCancha";
+    private string player1Tag = "Player1";
+    private string player2Tag = "Player2";
 
-    void Start()
+    private void Start()
     {
-        // Encuentra el objeto con el tag especificado
-        GameObject targetGameObject = GameObject.FindWithTag(targetTag);
-
-        if (targetGameObject != null)
+        GameObject balon = GameObject.FindWithTag(balonTag);
+        if (balon != null)
         {
-            targetObject = targetGameObject.transform;
-
-            // Configura la posiciÛn inicial de la c·mara
-            Vector3 initialPosition = transform.position;
-            fixedYPosition = initialPosition.y;
-            fixedZPosition = initialPosition.z;
+            targetObject = balon.transform;
         }
         else
         {
-            Debug.LogError("No se encontrÛ un objeto con el tag 'BalonCancha'. Aseg˙rate de que existe en la escena.");
+            Debug.LogError("No se encontr√≥ un objeto con el tag 'BalonCancha'. Aseg√∫rate de que existe en la escena.");
         }
+
+        Vector3 initialPosition = transform.position;
+        fixedYPosition = initialPosition.y;
+        fixedZPosition = initialPosition.z;
     }
 
-    void Update()
+    private void Update()
     {
         if (targetObject != null)
         {
-            // Actualiza la posiciÛn de la c·mara en el eje X del objeto seguido
             Vector3 newPosition = new Vector3(targetObject.position.x, fixedYPosition, fixedZPosition);
             transform.position = newPosition;
         }
+    }
+
+    // Cambiar objetivo a "Player1"
+    public void CambiarObjetivoAPlayer1()
+    {
+        GameObject player1 = GameObject.FindWithTag(player1Tag);
+        if (player1 != null)
+        {
+            targetObject = player1.transform;
+            Debug.Log("La c√°mara ahora sigue al jugador con tag Player1");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontr√≥ un objeto con el tag 'Player1'.");
+        }
+    }
+
+    // Cambiar objetivo a "Player2"
+    public void CambiarObjetivoAPlayer2()
+    {
+        GameObject player2 = GameObject.FindWithTag(player2Tag);
+        if (player2 != null)
+        {
+            targetObject = player2.transform;
+            Debug.Log("La c√°mara ahora sigue al jugador con tag Player2");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontr√≥ un objeto con el tag 'Player2'.");
+        }
+    }
+
+    // Cambiar objetivo al bal√≥n
+    public void CambiarObjetivoAlBalon(Transform balon)
+    {
+        targetObject = balon;
+        Debug.Log("La c√°mara ahora sigue al bal√≥n: " + balon.name);
     }
 }
