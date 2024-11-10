@@ -10,6 +10,8 @@ TagManager:
   - pelota2
   - Player1
   - Player2
+  - PuntoPlayer1
+  - PuntoPlayer2
   layers:
   - Default
   - TransparentFX
