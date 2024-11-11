@@ -11,6 +11,7 @@ public class BallManagerP1 : MonoBehaviour
     private GameObject balonCancha;     // Referencia al balón de la cancha
     public bool tieneBalon = false;    // Si el jugador tiene un balón en la mano
     private ControlCodeP1 controlCode;    // Referencia al script del personaje
+    private MovimientoDeCamara camara;   // Referencia al script de la cámara
 
     void Start()
     {
@@ -34,6 +35,9 @@ public class BallManagerP1 : MonoBehaviour
 
         // Obtener la referencia al ControlCode en el mismo GameObject
         controlCode = GetComponent<ControlCodeP1>();
+
+        // Obtener la referencia al script de la cámara
+        camara = Camera.main.GetComponent<MovimientoDeCamara>();
     }
 
     void Update()
@@ -62,12 +66,10 @@ public class BallManagerP1 : MonoBehaviour
                 BallManagerP2 jugador2 = col.GetComponent<BallManagerP2>();
                 if (jugador2 != null && !tieneBalon)
                 {
-                     StartCoroutine(QuitarBalonAwait(jugador2.gameObject, 0.85f));
+                    StartCoroutine(QuitarBalonAwait(jugador2.gameObject, 0.85f));
                 }
             }
-
         }
-
     }
 
     void RecogerBalon()
@@ -78,14 +80,15 @@ public class BallManagerP1 : MonoBehaviour
             if (col.gameObject == balonCancha)
             {
                 balonCancha.SetActive(false); // Desactivar el balón de la cancha
-
                 tieneBalon = true; // Indicar que el jugador ahora tiene el balón
+
+                // Cambiar objetivo de la cámara al jugador con tag Player1
+                camara.CambiarObjetivoAPlayer1();
 
                 controlCode.CambiarEstadoBalon(tieneBalon);
             }
         }
     }
-
 
     void LanzarBalonAwait()
     {
@@ -114,12 +117,13 @@ public class BallManagerP1 : MonoBehaviour
 
         tieneBalon = false; // Resetear el estado de tener balón
 
-        // Actualizar el estado del balón en el personaje
+        // Cambiar objetivo de la cámara al balón
+        camara.CambiarObjetivoAlBalon(balonCancha.transform);
+
         controlCode.CambiarEstadoBalon(tieneBalon);
-        
     }
 
-     IEnumerator QuitarBalonAwait(GameObject oponente, float delay)
+    IEnumerator QuitarBalonAwait(GameObject oponente, float delay)
     {
         controlCode.QuitarBalonP1();
         yield return new WaitForSeconds(delay);
@@ -127,29 +131,28 @@ public class BallManagerP1 : MonoBehaviour
     }
 
     public void RobarBalon(GameObject oponente)
-    {   
+    {
         // Verificar si el oponente tiene el balón
         BallManagerP2 managerOponente = oponente.GetComponent<BallManagerP2>();
-        ControlCodeP2 controlCodeOponente = oponente.GetComponent<ControlCodeP2>(); // Obtener el script ControlCodeP1 de Player1
+        ControlCodeP2 controlCodeOponente = oponente.GetComponent<ControlCodeP2>();
 
-       if (managerOponente != null && managerOponente.tieneBalonP2)
+        if (managerOponente != null && managerOponente.tieneBalonP2)
         {
-        // Actualizar el estado de tieneBalon en Player1
-            managerOponente.tieneBalonP2 = false; 
+            // Actualizar el estado de tieneBalon en Player1
+            managerOponente.tieneBalonP2 = false;
             tieneBalon = true;
 
-        // Cambiar el estado de balón en el animador de Player1 para desactivar dribleo
+            // Cambiar el objetivo de la cámara al jugador que robó el balón
+            camara.CambiarObjetivoAPlayer1();
+
             if (controlCodeOponente != null)
-            {   
+            {
                 controlCodeOponente.BalonRobadoP2();
                 controlCodeOponente.CambiarEstadoBalon(false);
             }
 
-        // Activar el estado de balón en Player2
             controlCode.CambiarEstadoBalon(tieneBalon);
-
             Debug.Log("Jugador 1 ha robado el balón del Jugador 2.");
         }
     }
-
 }

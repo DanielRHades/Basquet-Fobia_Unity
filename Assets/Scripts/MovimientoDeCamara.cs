@@ -1,42 +1,98 @@
 using UnityEngine;
 
-public class FollowObjectOnXAxis : MonoBehaviour
+public class MovimientoDeCamara : MonoBehaviour
 {
-    // Distancia fija en el eje Y y Z
-    public float fixedYPosition;
-    public float fixedZPosition;
+    public float fixedYPosition;      // Posición fija en el eje Y
+    public float fixedZPosition;      // Posición fija en el eje Z
+    public float smoothSpeed = 0.125f; // Velocidad de suavizado
 
-    // Nombre del tag del objeto que la c�mara debe seguir
-    private string targetTag = "BalonCancha";
-    private Transform targetObject;
+    // Offset para la distancia de la cámara respecto al objetivo
+    public Vector3 farOffset = new Vector3(0, 5, -10); // Vista general
+    public Vector3 closeOffset = new Vector3(0, 4, -8); // Vista cercana
 
-    void Start()
+    private Vector3 currentOffset;    // Offset actual de la cámara
+    private Transform targetObject;   // El objeto que la cámara sigue dinámicamente
+    private string balonTag = "BalonCancha";
+    private string player1Tag = "Player1";
+    private string player2Tag = "Player2";
+
+    private void Start()
     {
-        // Encuentra el objeto con el tag especificado
-        GameObject targetGameObject = GameObject.FindWithTag(targetTag);
-
-        if (targetGameObject != null)
+        GameObject balon = GameObject.FindWithTag(balonTag);
+        if (balon != null)
         {
-            targetObject = targetGameObject.transform;
-
-            // Configura la posici�n inicial de la c�mara
-            Vector3 initialPosition = transform.position;
-            fixedYPosition = initialPosition.y;
-            fixedZPosition = initialPosition.z;
+            targetObject = balon.transform;
         }
         else
         {
-            Debug.LogError("No se encontr� un objeto con el tag 'BalonCancha'. Aseg�rate de que existe en la escena.");
+            Debug.LogError("No se encontró un objeto con el tag 'BalonCancha'. Asegúrate de que existe en la escena.");
         }
+
+        Vector3 initialPosition = transform.position;
+        fixedYPosition = initialPosition.y;
+        fixedZPosition = initialPosition.z;
+
+        // Establecer el offset inicial como la vista general
+        currentOffset = farOffset;
     }
 
-    void Update()
+    private void LateUpdate()
     {
         if (targetObject != null)
         {
-            // Actualiza la posici�n de la c�mara en el eje X del objeto seguido
-            Vector3 newPosition = new Vector3(targetObject.position.x, fixedYPosition, fixedZPosition);
-            transform.position = newPosition;
+            // Determinar si el objetivo se está moviendo
+            bool isMoving = targetObject.GetComponent<Rigidbody>() != null && targetObject.GetComponent<Rigidbody>().velocity.magnitude > 0.1f;
+
+            // Cambiar el offset según el movimiento del objetivo
+            currentOffset = isMoving ? closeOffset : farOffset;
+
+            // Calcula la posición deseada con el offset actual
+            Vector3 desiredPosition = targetObject.position + currentOffset;
+            desiredPosition.y = fixedYPosition; // Mantener la altura fija
+
+            // Suavizar el movimiento de la cámara hacia la posición deseada
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = smoothedPosition;
+
+            // Rotación opcional para mirar al objetivo
+            transform.LookAt(targetObject.position);
         }
+    }
+
+    // Cambiar objetivo a "Player1"
+    public void CambiarObjetivoAPlayer1()
+    {
+        GameObject player1 = GameObject.FindWithTag(player1Tag);
+        if (player1 != null)
+        {
+            targetObject = player1.transform;
+            Debug.Log("La cámara ahora sigue al jugador con tag Player1");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con el tag 'Player1'.");
+        }
+    }
+
+    // Cambiar objetivo a "Player2"
+    public void CambiarObjetivoAPlayer2()
+    {
+        GameObject player2 = GameObject.FindWithTag(player2Tag);
+        if (player2 != null)
+        {
+            targetObject = player2.transform;
+            Debug.Log("La cámara ahora sigue al jugador con tag Player2");
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un objeto con el tag 'Player2'.");
+        }
+    }
+
+    // Cambiar objetivo al balón
+    public void CambiarObjetivoAlBalon(Transform balon)
+    {
+        targetObject = balon;
+        Debug.Log("La cámara ahora sigue al balón: " + balon.name);
     }
 }

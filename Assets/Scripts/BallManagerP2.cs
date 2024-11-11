@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,13 +11,14 @@ public class BallManagerP2 : MonoBehaviour
     private GameObject balonCancha;       // Referencia al balón de la cancha
     public bool tieneBalonP2 = false;    // Verifica si el segundo jugador ha recogido la pelota del centro
     private ControlCodeP2 controlCode;    // Referencia al script del personaje
+    private MovimientoDeCamara camara;    // Referencia al script de la cámara
 
     void Start()
     {
         // Inicializar puntoLanzamientoP2 si es null
         if (puntoLanzamientoP2 == null)
         {
-            puntoLanzamientoP2 = this.transform; // Establecer a la posición del prefab
+            puntoLanzamientoP2 = this.transform;
         }
 
         // Buscar el BalonCancha por su tag
@@ -35,38 +35,40 @@ public class BallManagerP2 : MonoBehaviour
         }
 
         controlCode = GetComponent<ControlCodeP2>();
+
+        // Obtener la referencia al script de la cámara
+        camara = Camera.main.GetComponent<MovimientoDeCamara>();
     }
 
     void Update()
     {
         // Recoger balón con el botón "O" o "buttonEast"
-        if (Gamepad.all.Count > 0 && Gamepad.all[1].buttonEast.wasPressedThisFrame && !tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonEast.wasPressedThisFrame && !tieneBalonP2)
         {
             Debug.Log("Jugador 2 intentando recoger la pelota...");
             RecogerBalonP2();
         }
 
         // Lanzar balón con el botón "X" o "buttonSouth"
-        if (Gamepad.all.Count > 0 && Gamepad.all[1].buttonSouth.wasPressedThisFrame && tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonSouth.wasPressedThisFrame && tieneBalonP2)
         {
             LanzarBalonAwait();
         }
 
         // Robo de balón con el botón "Y" o "buttonNorth" para el Jugador 2
-        if (Gamepad.all.Count > 0 && Gamepad.all[1].buttonNorth.wasPressedThisFrame && !tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonNorth.wasPressedThisFrame && !tieneBalonP2)
         {
             // Detectar colisiones cercanas
             Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f);
             foreach (Collider col in colliders)
             {
                 // Si el objeto tiene el componente BallManagerP1 (para el Jugador 1)
-                BallManagerP1 jugador2 = col.GetComponent<BallManagerP1>();
-                if (jugador2 != null && !tieneBalonP2)
+                BallManagerP1 jugador1 = col.GetComponent<BallManagerP1>();
+                if (jugador1 != null && !tieneBalonP2)
                 {
-                    StartCoroutine(QuitarBalonAwait(jugador2.gameObject, 0.85f));
+                    StartCoroutine(QuitarBalonAwait(jugador1.gameObject, 0.85f));
                 }
             }
-
         }
     }
 
@@ -77,20 +79,23 @@ public class BallManagerP2 : MonoBehaviour
         {
             if (col.gameObject == balonCancha)
             {
-                balonCancha.SetActive(false);
-                 // Desactivar el balón de la cancha
+                balonCancha.SetActive(false); // Desactivar el balón de la cancha
                 tieneBalonP2 = true; // Indicar que el jugador ahora tiene el balón
+
+                // Cambiar objetivo de la cámara al jugador con tag Player2
+                camara.CambiarObjetivoAPlayer2();
 
                 controlCode.CambiarEstadoBalon(tieneBalonP2);
             }
         }
     }
 
-      void LanzarBalonAwait()
+    void LanzarBalonAwait()
     {
         controlCode.LanzarBalonP2();
         Invoke("LanzarBalon", 2f);
     }
+
     void LanzarBalon()
     {
         // Colocar el balón de la cancha 2 unidades más lejos en la dirección de frente del jugador
@@ -103,7 +108,6 @@ public class BallManagerP2 : MonoBehaviour
         // Calcular la trayectoria del lanzamiento
         Vector3 toCesta = cestaP2 - lanzamientoPosicion; // Usar la nueva posición de lanzamiento
         Vector3 toCestaXZ = new Vector3(toCesta.x, 0, toCesta.z);
-        float distanciaHorizontal = toCestaXZ.magnitude;
         float tiempo = Mathf.Sqrt(-2 * alturaMaximaP2 / Physics.gravity.y) +
                        Mathf.Sqrt(2 * (toCesta.y - alturaMaximaP2) / Physics.gravity.y);
         Vector3 velocidadXZ = toCestaXZ / tiempo;
@@ -112,6 +116,9 @@ public class BallManagerP2 : MonoBehaviour
         rb.velocity = velocidadInicial;
 
         tieneBalonP2 = false; // Resetear el estado de tener balón
+
+        // Cambiar objetivo de la cámara al balón
+        camara.CambiarObjetivoAlBalon(balonCancha.transform);
 
         controlCode.CambiarEstadoBalon(tieneBalonP2);
     }
@@ -124,29 +131,27 @@ public class BallManagerP2 : MonoBehaviour
     }
 
     public void RobarBalonP2(GameObject oponente)
-    {   
-    // Verificar si el oponente (Jugador 1) tiene el balón
+    {
+        // Verificar si el oponente (Jugador 1) tiene el balón
         BallManagerP1 managerOponente = oponente.GetComponent<BallManagerP1>();
-        ControlCodeP1 controlCodeOponente = oponente.GetComponent<ControlCodeP1>(); // Obtener el script ControlCodeP1 de Player1
+        ControlCodeP1 controlCodeOponente = oponente.GetComponent<ControlCodeP1>();
 
         if (managerOponente != null && managerOponente.tieneBalon)
         {
-        // Actualizar el estado de tieneBalon en Player1
-            managerOponente.tieneBalon = false; 
+            managerOponente.tieneBalon = false;
             tieneBalonP2 = true;
 
-        // Cambiar el estado de balón en el animador de Player1 para desactivar dribleo
+            // Cambiar el objetivo de la cámara al jugador que robó el balón (Player2)
+            camara.CambiarObjetivoAPlayer2();
+
             if (controlCodeOponente != null)
             {
                 controlCodeOponente.BalonRobadoP1();
                 controlCodeOponente.CambiarEstadoBalon(false);
             }
 
-        // Activar el estado de balón en Player2
             controlCode.CambiarEstadoBalon(tieneBalonP2);
-            
             Debug.Log("Jugador 2 ha robado el balón del Jugador 1.");
         }
     }
-
 }
