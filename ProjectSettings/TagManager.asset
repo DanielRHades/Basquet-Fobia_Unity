@@ -12,6 +12,7 @@ TagManager:
   - Player2
   - PuntoPlayer1
   - PuntoPlayer2
+  - PuntajeCanvas
   layers:
   - Default
   - TransparentFX
