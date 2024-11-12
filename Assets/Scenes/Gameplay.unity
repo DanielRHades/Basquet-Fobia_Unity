@@ -962,7 +962,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110006423}
-  m_Material: {fileID: 13400000, guid: 15c9fff864d7bb74f9777a5c9e949735, type: 2}
+  m_Material: {fileID: 13400000, guid: f2e74f13280901c4f88040477d41d1a1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1654,13 +1654,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788975633}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.15241134, y: -0, z: -0, w: 0.98831713}
-  m_LocalPosition: {x: -0.23, y: 7.58, z: -16.09}
+  m_LocalRotation: {x: 0.256046, y: -0, z: -0, w: 0.9666646}
+  m_LocalPosition: {x: -0.23, y: 7.27, z: -12.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 17.533, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 29.671, y: 0, z: 0}
 --- !u!114 &1788975637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1673,11 +1673,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbca4ee0f2eca5b4886ad9f92537aa7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedYPosition: 0
-  fixedZPosition: 0
   smoothSpeed: 0.125
-  farOffset: {x: 0, y: 5, z: -10}
-  closeOffset: {x: 0, y: 4, z: -8}
+  playerOffset: {x: 0, y: 5, z: -10}
 --- !u!1 &1850021241
 GameObject:
   m_ObjectHideFlags: 0

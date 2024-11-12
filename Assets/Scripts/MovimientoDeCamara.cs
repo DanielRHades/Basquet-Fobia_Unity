@@ -2,59 +2,53 @@ using UnityEngine;
 
 public class MovimientoDeCamara : MonoBehaviour
 {
-    public float fixedYPosition;      // Posición fija en el eje Y
-    public float fixedZPosition;      // Posición fija en el eje Z
-    public float smoothSpeed = 0.125f; // Velocidad de suavizado
+    public float smoothSpeed = 0.0000000005f; // Velocidad de suavizado más baja para un seguimiento más suave
+    public Vector3 playerOffset = new Vector3(0, 5, -10); // Offset cuando sigue al jugador (más cerca)
+    private Vector3 fixedBallPosition = new Vector3(-0.23f, 7.27f, -12.33f); // Posición inicial para la cámara cuando sigue la pelota
 
-    // Offset para la distancia de la cámara respecto al objetivo
-    public Vector3 farOffset = new Vector3(0, 5, -10); // Vista general
-    public Vector3 closeOffset = new Vector3(0, 4, -8); // Vista cercana
-
-    private Vector3 currentOffset;    // Offset actual de la cámara
-    private Transform targetObject;   // El objeto que la cámara sigue dinámicamente
+    private Transform targetObject;    // El objeto que la cámara sigue dinámicamente
     private string balonTag = "BalonCancha";
     private string player1Tag = "Player1";
     private string player2Tag = "Player2";
+    private bool isFollowingBall = true; // Controla si está siguiendo al balón inicialmente
 
     private void Start()
     {
+        // Configura la cámara en la posición fija para el balón al inicio
+        transform.position = fixedBallPosition;
+
         GameObject balon = GameObject.FindWithTag(balonTag);
         if (balon != null)
         {
             targetObject = balon.transform;
+            isFollowingBall = true;
         }
         else
         {
             Debug.LogError("No se encontró un objeto con el tag 'BalonCancha'. Asegúrate de que existe en la escena.");
         }
-
-        Vector3 initialPosition = transform.position;
-        fixedYPosition = initialPosition.y;
-        fixedZPosition = initialPosition.z;
-
-        // Establecer el offset inicial como la vista general
-        currentOffset = farOffset;
     }
 
     private void LateUpdate()
     {
         if (targetObject != null)
         {
-            // Determinar si el objetivo se está moviendo
-            bool isMoving = targetObject.GetComponent<Rigidbody>() != null && targetObject.GetComponent<Rigidbody>().velocity.magnitude > 0.1f;
+            if (isFollowingBall)
+            {
+                // Actualiza solo la posición en X para seguir al balón horizontalmente, manteniendo Y y Z fijos
+                Vector3 targetPosition = new Vector3(targetObject.position.x, fixedBallPosition.y, fixedBallPosition.z);
+                Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
+                transform.position = smoothedPosition;
+            }
+            else
+            {
+                // Si sigue a un jugador, usa un offset más cercano con suavizado
+                Vector3 desiredPosition = targetObject.position + playerOffset;
+                Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+                transform.position = smoothedPosition;
+            }
 
-            // Cambiar el offset según el movimiento del objetivo
-            currentOffset = isMoving ? closeOffset : farOffset;
-
-            // Calcula la posición deseada con el offset actual
-            Vector3 desiredPosition = targetObject.position + currentOffset;
-            desiredPosition.y = fixedYPosition; // Mantener la altura fija
-
-            // Suavizar el movimiento de la cámara hacia la posición deseada
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-            transform.position = smoothedPosition;
-
-            // Rotación opcional para mirar al objetivo
+            // Siempre mira al objetivo (ya sea el balón o el jugador)
             transform.LookAt(targetObject.position);
         }
     }
@@ -66,6 +60,7 @@ public class MovimientoDeCamara : MonoBehaviour
         if (player1 != null)
         {
             targetObject = player1.transform;
+            isFollowingBall = false;
             Debug.Log("La cámara ahora sigue al jugador con tag Player1");
         }
         else
@@ -81,6 +76,7 @@ public class MovimientoDeCamara : MonoBehaviour
         if (player2 != null)
         {
             targetObject = player2.transform;
+            isFollowingBall = false;
             Debug.Log("La cámara ahora sigue al jugador con tag Player2");
         }
         else
@@ -93,6 +89,8 @@ public class MovimientoDeCamara : MonoBehaviour
     public void CambiarObjetivoAlBalon(Transform balon)
     {
         targetObject = balon;
+        isFollowingBall = true;
         Debug.Log("La cámara ahora sigue al balón: " + balon.name);
     }
 }
+
