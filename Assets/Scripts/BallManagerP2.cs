@@ -105,7 +105,7 @@ public class BallManagerP2 : MonoBehaviour
             lanzandoBalonP2 = true; 
             bloqueandoInputsP2 = true; 
             controlCode.LanzarBalonP2();
-            Invoke("LanzarBalon", 2f); 
+            Invoke("LanzarBalon", 1.6f); 
         }
     }
 
