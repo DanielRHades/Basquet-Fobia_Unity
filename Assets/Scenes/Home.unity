@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EMPEZAR PARTIDA
+  m_text: PRESIONA START PARA EMPEZAR
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
@@ -293,8 +293,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000022888, y: -215}
-  m_SizeDelta: {x: 376.2643, y: 91.1932}
+  m_AnchoredPosition: {x: -0.000022888, y: -242}
+  m_SizeDelta: {x: 503.3565, y: 144.9868}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &197856605
 MonoBehaviour:

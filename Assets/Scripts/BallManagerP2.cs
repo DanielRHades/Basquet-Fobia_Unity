@@ -9,7 +9,9 @@ public class BallManagerP2 : MonoBehaviour
     public Vector3 cestaP2;               // Posición de la cesta para el segundo jugador
     public float alturaMaximaP2 = 5f;     // Altura máxima que debe alcanzar el balón
     private GameObject balonCancha;       // Referencia al balón de la cancha
-    public bool tieneBalonP2 = false;    // Verifica si el segundo jugador ha recogido la pelota del centro
+    public bool tieneBalonP2 = false;  
+    public bool bloqueandoInputsP2 = false;
+    public bool lanzandoBalonP2 = false;  // Verifica si el segundo jugador ha recogido la pelota del centro
     private ControlCodeP2 controlCode;    // Referencia al script del personaje
     private MovimientoDeCamara camara;    // Referencia al script de la cámara
 
@@ -41,7 +43,13 @@ public class BallManagerP2 : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        // Verificar si los inputs están bloqueados
+        if (bloqueandoInputsP2)
+        {
+            return;
+        }
+
         // Recoger balón con el botón "O" o "buttonEast"
         if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonEast.wasPressedThisFrame && !tieneBalonP2)
         {
@@ -92,35 +100,70 @@ public class BallManagerP2 : MonoBehaviour
 
     void LanzarBalonAwait()
     {
-        controlCode.LanzarBalonP2();
-        Invoke("LanzarBalon", 2f);
+        if (!lanzandoBalonP2)
+        {
+            lanzandoBalonP2 = true; 
+            bloqueandoInputsP2 = true; 
+            controlCode.LanzarBalonP2();
+            Invoke("LanzarBalon", 2f); 
+        }
     }
 
     void LanzarBalon()
     {
-        // Colocar el balón de la cancha 2 unidades más lejos en la dirección de frente del jugador
-        Vector3 lanzamientoPosicion = puntoLanzamientoP2.position + puntoLanzamientoP2.forward * 2; // Aumentar 2 unidades
-        balonCancha.SetActive(true);
-        balonCancha.transform.position = lanzamientoPosicion;
+    // Colocar el balón de la cancha 2 unidades más lejos en la dirección de frente del jugador
+    Vector3 lanzamientoPosicion = puntoLanzamientoP2.position + puntoLanzamientoP2.forward * 2;
+    balonCancha.SetActive(true);
+    balonCancha.transform.position = lanzamientoPosicion;
 
-        Rigidbody rb = balonCancha.GetComponent<Rigidbody>();
+    Rigidbody rb = balonCancha.GetComponent<Rigidbody>();
 
-        // Calcular la trayectoria del lanzamiento
-        Vector3 toCesta = cestaP2 - lanzamientoPosicion; // Usar la nueva posición de lanzamiento
-        Vector3 toCestaXZ = new Vector3(toCesta.x, 0, toCesta.z);
-        float tiempo = Mathf.Sqrt(-2 * alturaMaximaP2 / Physics.gravity.y) +
-                       Mathf.Sqrt(2 * (toCesta.y - alturaMaximaP2) / Physics.gravity.y);
-        Vector3 velocidadXZ = toCestaXZ / tiempo;
-        float velocidadY = Mathf.Sqrt(-2 * Physics.gravity.y * alturaMaximaP2);
-        Vector3 velocidadInicial = velocidadXZ + Vector3.up * velocidadY;
-        rb.velocity = velocidadInicial;
+    // Calcular la trayectoria del lanzamiento
+    Vector3 toCesta = cestaP2 - lanzamientoPosicion;
 
-        tieneBalonP2 = false; // Resetear el estado de tener balón
+    // Distancia en X entre el jugador y la cesta (en valor absoluto para manejar canchas opuestas)
+    float distanciaX = Mathf.Abs(toCesta.x);
 
-        // Cambiar objetivo de la cámara al balón
-        camara.CambiarObjetivoAlBalon(balonCancha.transform);
+    // Definir la probabilidad de acierto o fallo
+    float probabilidadAcierto = (distanciaX > 12.8f) ? 0.2f : (distanciaX > 6.4f ? 0.6f : 1.0f);
 
-        controlCode.CambiarEstadoBalon(tieneBalonP2);
+    // Decidir si se modifica la posición en Z para fallar el tiro
+    if (distanciaX > 6.4f && Random.value > probabilidadAcierto)
+    {
+        // Elegir aleatoriamente si desviamos la Z en 0.5 o -0.5
+        float desviacionZ = Random.Range(0, 2) == 0 ? 0.5f : -0.5f;
+        toCesta.z += desviacionZ;
+
+        // Mostrar en la consola la probabilidad y la desviación en Z
+        Debug.Log("Probabilidad: " + (1 - probabilidadAcierto) + " - Fallo en Z modificado a: " + toCesta.z);
+    }
+    else
+    {
+        // Mostrar en la consola la probabilidad y que el tiro es acertado
+        Debug.Log("Probabilidad: " + probabilidadAcierto + " - Tiro sin modificación en Z");
+    }
+
+    // Calcular el lanzamiento usando la posición modificada en Z
+    Vector3 toCestaXZ = new Vector3(toCesta.x, 0, toCesta.z);
+    float tiempo = Mathf.Sqrt(-2 * alturaMaximaP2 / Physics.gravity.y) +
+                   Mathf.Sqrt(2 * (toCesta.y - alturaMaximaP2) / Physics.gravity.y);
+    Vector3 velocidadXZ = toCestaXZ / tiempo;
+    float velocidadY = Mathf.Sqrt(-2 * Physics.gravity.y * alturaMaximaP2);
+    Vector3 velocidadInicial = velocidadXZ + Vector3.up * velocidadY;
+
+    rb.velocity = velocidadInicial;
+
+    tieneBalonP2 = false; // Resetear el estado de tener balón
+
+    // Cambiar objetivo de la cámara al balón
+    camara.CambiarObjetivoAlBalon(balonCancha.transform);
+
+    controlCode.CambiarEstadoBalon(tieneBalonP2);
+
+    lanzandoBalonP2 = false;
+
+    bloqueandoInputsP2 = false;
+
     }
 
     IEnumerator QuitarBalonAwait(GameObject oponente, float delay)
@@ -136,7 +179,7 @@ public class BallManagerP2 : MonoBehaviour
         BallManagerP1 managerOponente = oponente.GetComponent<BallManagerP1>();
         ControlCodeP1 controlCodeOponente = oponente.GetComponent<ControlCodeP1>();
 
-        if (managerOponente != null && managerOponente.tieneBalon)
+        if (managerOponente != null && managerOponente.tieneBalon && !managerOponente.lanzandoBalon)
         {
             managerOponente.tieneBalon = false;
             tieneBalonP2 = true;

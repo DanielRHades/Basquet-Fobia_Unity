@@ -10,24 +10,22 @@ public class ControlCodeP1 : MonoBehaviour
     // Variables para las velocidades de trotar y correr
     public float velocidadTrotar = 100f;
     public float velocidadCorrer = 300f;
-
     // Variable para capturar el valor del gatillo (correr)
     float correrValor = 0f;
-
     // Variable para capturar el valor de movimiento del stick
     Vector2 direccionMovimiento;
-
     // Velocidad de suavización de rotación
     public float suavizadoRotacion = 5f;
-
     // Umbral para considerar movimiento
     public float umbralMovimiento = 0.1f;
-
+    private BallManagerP1 ballManager;
     public Animator player1;
     public Animator balon;// Asegúrate de asignar esto desde el inspector
 
     void Start()
-    {
+    {   
+        ballManager = GetComponent<BallManagerP1>();
+
         ultimaPosicion = transform.position;
 
         if (player1 == null)
@@ -45,7 +43,11 @@ public class ControlCodeP1 : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        if(ballManager.bloqueandoInputs)
+        {
+            return;
+        }
         // Movimiento del personaje
         if (direccionMovimiento.magnitude > umbralMovimiento)
         {

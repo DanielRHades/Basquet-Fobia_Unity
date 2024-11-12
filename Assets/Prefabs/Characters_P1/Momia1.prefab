@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puntoLanzamiento: {fileID: 3035506816117406385}
-  cesta: {x: 12.8, y: 4, z: 0}
+  cesta: {x: 12.8, y: 4.3, z: 0}
   alturaMaxima: 5
   tieneBalon: 0
 --- !u!54 &3864996102966034976

@@ -19,15 +19,16 @@ public class ControlCodeP2 : MonoBehaviour
 
     // Velocidad de suavización de rotación
     public float suavizadoRotacion = 5f;
-
+    private BallManagerP2 ballManager;
     // Umbral para considerar movimiento
     public float umbralMovimiento = 0.1f;
-
     public Animator player2;
     public Animator balon;// Asegúrate de asignar esto desde el inspector
 
     void Start()
-    {
+    {   
+        ballManager = GetComponent<BallManagerP2>();
+
         ultimaPosicion = transform.position;
 
         if (player2 == null)
@@ -45,7 +46,11 @@ public class ControlCodeP2 : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        if(ballManager.bloqueandoInputsP2)
+        {
+            return;
+        }
         // Movimiento del personaje
         if (direccionMovimiento.magnitude > umbralMovimiento)
         {

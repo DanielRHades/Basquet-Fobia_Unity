@@ -206,9 +206,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puntoLanzamientoP2: {fileID: 7843480433185213255}
-  cestaP2: {x: -12.8, y: 4, z: 0}
+  cestaP2: {x: -12.8, y: 4.3, z: 0}
   alturaMaximaP2: 5
   tieneBalonP2: 0
+  bloqueandoInputsP2: 0
+  lanzandoBalonP2: 0
 --- !u!54 &3864996102966034976
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -426,7 +428,7 @@ Animator:
   m_GameObject: {fileID: 8508311730701187434}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e56f556084abebb4fbc9ecd0ac917453, type: 2}
+  m_Controller: {fileID: 9100000, guid: 38600a7b2b30219428324ba386822e8a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
