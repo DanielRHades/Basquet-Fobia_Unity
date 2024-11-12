@@ -36,7 +36,7 @@ public class CestaDerechaTriggerP1 : MonoBehaviour
     {
         if (puntosPlayer1Text != null)
         {
-            puntosPlayer1Text.text = "Jugador 1: " + contadorPuntosPlayer1.ToString();
+            puntosPlayer1Text.text = "PUNTOS P1: " + contadorPuntosPlayer1.ToString();
         }
     }
 
