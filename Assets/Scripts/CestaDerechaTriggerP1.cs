@@ -42,6 +42,6 @@ public class CestaDerechaTriggerP1 : MonoBehaviour
 
     private void CambiarAEscenaGanador()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(0);
     }
 }

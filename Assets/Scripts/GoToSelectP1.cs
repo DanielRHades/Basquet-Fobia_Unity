@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
-public class StartGame : MonoBehaviour
-{   
+public class GoToSelectP1 : MonoBehaviour
+{
     void Update()
     {
         if(Gamepad.all[0].startButton.wasPressedThisFrame || Gamepad.all[1].startButton.wasPressedThisFrame){
-           GoToControl(); 
+           GoToSelectPlayer1(); 
         }
     }
     
-    public void GoToControl()
+    public void GoToSelectPlayer1()
     {   
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
     }
 
 }

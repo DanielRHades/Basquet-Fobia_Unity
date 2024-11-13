@@ -79,6 +79,6 @@ public class CharacterSelectionPlayer2 : MonoBehaviour
     public void StartGame()
     {
         PlayerPrefs.SetInt("selectedCharacter2", selectedCharacter); // Guardar personaje del jugador 2
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(4, LoadSceneMode.Single);
     }
 }
