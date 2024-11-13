@@ -378,6 +378,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -861488769506051131, guid: 62b7cdcf1bf4b8146988ccf388229089, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 50975f09aaddf074eb5800461ad8c3e7, type: 2}
     - target: {fileID: 919132149155446097, guid: 62b7cdcf1bf4b8146988ccf388229089, type: 3}
       propertyPath: m_Name
       value: balonfbx

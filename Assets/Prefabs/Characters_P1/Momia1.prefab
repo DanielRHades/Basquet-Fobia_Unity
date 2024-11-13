@@ -377,7 +377,7 @@ PrefabInstance:
     - target: {fileID: -8580116375230995847, guid: efe013e9e6d0230488b3fb2953bb8cea, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 8ae959d7e3b1caa49b6e82eb5576fb70, type: 2}
+      objectReference: {fileID: 2100000, guid: 069df9eec71455d4ea12a6e0ef5f4c33, type: 2}
     - target: {fileID: -7426884395240415522, guid: efe013e9e6d0230488b3fb2953bb8cea, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -481,6 +481,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -861488769506051131, guid: 62b7cdcf1bf4b8146988ccf388229089, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 50975f09aaddf074eb5800461ad8c3e7, type: 2}
     - target: {fileID: 919132149155446097, guid: 62b7cdcf1bf4b8146988ccf388229089, type: 3}
       propertyPath: m_Name
       value: balonfbx
