@@ -51,20 +51,20 @@ public class BallManagerP2 : MonoBehaviour
         }
 
         // Recoger balón con el botón "O" o "buttonEast"
-        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonEast.wasPressedThisFrame && !tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonNorth.wasPressedThisFrame && !tieneBalonP2)
         {
             Debug.Log("Jugador 2 intentando recoger la pelota...");
             RecogerBalonP2();
         }
 
         // Lanzar balón con el botón "X" o "buttonSouth"
-        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonSouth.wasPressedThisFrame && tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonEast.wasPressedThisFrame && tieneBalonP2)
         {
             LanzarBalonAwait();
         }
 
         // Robo de balón con el botón "Y" o "buttonNorth" para el Jugador 2
-        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonNorth.wasPressedThisFrame && !tieneBalonP2)
+        if (Gamepad.all.Count > 1 && Gamepad.all[1].buttonWest.wasPressedThisFrame && !tieneBalonP2)
         {
             // Detectar colisiones cercanas
             Collider[] colliders = Physics.OverlapSphere(transform.position, 1.5f);
