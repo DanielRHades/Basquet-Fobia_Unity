@@ -36,7 +36,7 @@ public class CestaIzquierdaTriggerP2 : MonoBehaviour
     {
         if (puntosPlayer2Text != null)
         {
-            puntosPlayer2Text.text = "PUNTOS P2: " + contadorPuntosPlayer2.ToString();
+            puntosPlayer2Text.text = contadorPuntosPlayer2.ToString();
         }
     }
 
