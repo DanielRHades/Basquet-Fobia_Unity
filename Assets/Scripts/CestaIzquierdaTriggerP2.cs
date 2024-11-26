@@ -48,6 +48,6 @@ public class CestaIzquierdaTriggerP2 : MonoBehaviour
 
     private void CambiarAEscenaGanador()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(5);
     }
 }
