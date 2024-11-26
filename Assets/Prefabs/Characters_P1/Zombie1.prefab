@@ -193,7 +193,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -271,8 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1bfe0e1985e4d459f683f2480c5c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadTrotar: 5
-  velocidadCorrer: 10
+  velocidadTrotar: 6
+  velocidadCorrer: 8
   suavizadoRotacion: 5
   umbralMovimiento: 0.1
   player1: {fileID: 8574125351548219387}
