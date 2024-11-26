@@ -40,6 +40,12 @@ public class CestaIzquierdaTriggerP2 : MonoBehaviour
         }
     }
 
+    public int GetPuntosPlayer2()
+    {
+        return contadorPuntosPlayer2;
+    }   
+
+
     private void CambiarAEscenaGanador()
     {
         SceneManager.LoadScene(0);

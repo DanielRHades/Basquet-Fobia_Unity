@@ -13,6 +13,7 @@ TagManager:
   - PuntoPlayer1
   - PuntoPlayer2
   - PuntajeCanvas
+  - CanvasPausa
   layers:
   - Default
   - TransparentFX
@@ -52,4 +53,7 @@ TagManager:
     locked: 0
   - name: Fondo
     uniqueID: 977506547
+    locked: 0
+  - name: Pausa
+    uniqueID: 165992375
     locked: 0
