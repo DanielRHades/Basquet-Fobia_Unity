@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class WinnerManager : MonoBehaviour
 {
@@ -33,7 +32,6 @@ public class WinnerManager : MonoBehaviour
 
         MostrarGanador(p1, p2, ganador);
 
-        StartCoroutine(VolverAEscenaInicial());
     }
 
     void MostrarGanador(int p1, int p2, int ganador)
@@ -84,11 +82,5 @@ public class WinnerManager : MonoBehaviour
         {
             img.gameObject.SetActive(false);
         }
-    }
-
-    IEnumerator VolverAEscenaInicial()
-    {
-        yield return new WaitForSeconds(5f); // Espera 3 segundos
-        SceneManager.LoadScene(0); // Carga la escena con índice 0
     }
 }
