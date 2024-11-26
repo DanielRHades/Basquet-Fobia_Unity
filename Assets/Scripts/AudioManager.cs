@@ -64,12 +64,13 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic(AudioClip clip)
+    public void PlayMusic(AudioClip clip, float volume)
     {
         if (audioSource.clip != clip)
         {
             audioSource.Stop();
             audioSource.clip = clip;
+            audioSource.volume = volume; // Ajustar el volumen según la canción
             audioSource.Play();
         }
     }
