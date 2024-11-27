@@ -47,7 +47,8 @@ public class CestaIzquierdaTriggerP2 : MonoBehaviour
 
 
     private void CambiarAEscenaGanador()
-    {
+    {   
+        PlayerPrefs.SetInt("winnerPlayer", 1);
         SceneManager.LoadScene(5);
     }
 }

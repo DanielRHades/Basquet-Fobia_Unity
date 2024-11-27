@@ -28,7 +28,7 @@ public class WinnerManager : MonoBehaviour
         // Carga los datos desde PlayerPrefs
         int p1 = PlayerPrefs.GetInt("selectedCharacter1", 0); // Valor por defecto: 0 (Zombi)
         int p2 = PlayerPrefs.GetInt("selectedCharacter2", 0); // Valor por defecto: 0 (Zombi)
-        int ganador = PlayerPrefs.GetInt("WinnerPlayer", 0);  // Valor por defecto: 0 (P1 gana)
+        int ganador = PlayerPrefs.GetInt("winnerPlayer");  // Valor por defecto: 0 (P1 gana)
 
         MostrarGanador(p1, p2, ganador);
 

@@ -46,7 +46,8 @@ public class CestaDerechaTriggerP1 : MonoBehaviour
     }
 
     private void CambiarAEscenaGanador()
-    {
+    {   
+        PlayerPrefs.SetInt("winnerPlayer", 0);
         SceneManager.LoadScene(5);
     }
 }
